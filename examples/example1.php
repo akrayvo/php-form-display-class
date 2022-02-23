@@ -9,7 +9,24 @@ $form = new FormDisplay();
     </head>
 	<body>
         <h1>Html Form Example 1</h1>
-        <?php $form->formStart(null, 'get1', ['name'=>'myform']); ?>
+		<?php
+		if (!empty($_POST)) {
+			echo '<pre>';
+			var_dump($POST);
+			echo '</pre>';
+		}
+		if (!empty($_GET)) {
+			echo '<pre>';
+			var_dump($_GET);
+			echo '</pre>';
+		}
+		?>
+        <?php $form->formStart(null, 'get', ['name'=>'myform']); ?>
+		<?php $form->hidden('hiddenvar', 'hiddenval'); ?>
+		<?php $form->text('textvar', 'textval'); ?><br /><br />
+		<?php $form->textArea('tavar', 'taval'); ?><br /><br />
+		<?php $form->submit(); ?><br /><br />
+		<?php $form->reset(); ?><br /><br />
         <?php $form->formEnd(); ?>
 	</body>
 </html>

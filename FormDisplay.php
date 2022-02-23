@@ -99,15 +99,19 @@ class FormDisplay
         $attributes = [];
 
         // attributes created in the class are first and can be overwritten
-        foreach ($mainAttributes as $name => $value) {
-            $name = trim(strtolower($name));
-            $attributes[$name] = $value;
+        if (is_array($mainAttributes)) {
+            foreach ($mainAttributes as $name => $value) {
+                $name = trim(strtolower($name));
+                $attributes[$name] = $value;
+            }
         }
 
         // attributes passed as parameters are last and can overwrite values
-        foreach ($moreAttributes as $name => $value) {
-            $name = trim(strtolower($name));
-            $attributes[$name] = $value;
+        if (is_array($moreAttributes)) {
+            foreach ($moreAttributes as $name => $value) {
+                $name = trim(strtolower($name));
+                $attributes[$name] = $value;
+            }
         }
 
         if ($this->checkAddIdAttributeFromName($attributes)) {
@@ -140,9 +144,9 @@ class FormDisplay
 
         $attributes = $this->combineAttributes($attributes, $moreAttributes);
 
-        $html = '<form' . self::attributeArrayToString($attributes) . '>';
+        $html = '<form' . $this->attributeArrayToString($attributes) . '>';
 
-        return self::htmlOutputOrReturn($html);
+        return $this->htmlOutputOrReturn($html);
     }
 
     /**
@@ -151,6 +155,109 @@ class FormDisplay
     public function formEnd()
     {
         $html = '</form>';
-        return self::htmlOutputOrReturn($html);
+        return $this->htmlOutputOrReturn($html);
     }
+
+    /**
+     * any type of input <input type="text">, <input type="checkbox">, etc
+     */
+    private function input($type, $name, $value = '', $moreAttributes = [])
+    {
+        $attributes = [ 
+            'type' => $type,
+            'name' => $name,
+            'value' => $value
+        ];
+        
+        $attributes = $this->combineAttributes($attributes, $moreAttributes);
+
+        $closingSlash = '';
+        if (!empty($this->isXhtml)) {
+            $closingSlash = ' /';
+        }
+
+        $html = '<input' . $this->attributeArrayToString($attributes) . $closingSlash. '>';
+
+        return $this->htmlOutputOrReturn($html);
+    }
+
+    /**
+     * text input <input type="hidden">
+     */
+    public function hidden($name, $value = '', $moreAttributeAr = [])
+    {
+        return $this->input('hidden', $name, $value, $moreAttributes = []);
+    }
+
+    /**
+     * text input <input type="text">
+     */
+    public function text($name, $value = '', $moreAttributeAr = [])
+    {
+        return $this->input('text', $name, $value, $moreAttributes = []);
+    }
+
+    public  function textArea($name, $value='', $moreAttributes = [])
+    {
+        $attributes = [ 
+            'name' => $name
+        ];
+
+        $attributes = $this->combineAttributes($attributes, $moreAttributes);
+
+        $html = '<textarea' . self::attributeArrayToString($attributes) . '>' . 
+            $this->htmlEscape($value) . 
+            '</textarea>';
+        
+        return $this->htmlOutputOrReturn($html);
+    }
+
+    /**
+     * input buttons: submit and reset
+     */
+    private function inputButton($type, $value, $name,  $moreAttributes = [])
+    {
+        return $this->input($type, $name, $value, $moreAttributes);
+    }
+
+    /**
+     * submit input <input type="submit">
+     */
+    public function submit($value = '', $name = '',  $moreAttributes = [])
+    {
+        // * unlike other functions, the $value parameter is after $name
+
+        // set default name, button input data is rarely processed, so
+        //      the name can often use the default value
+        if (empty($name)) {
+            $name = 'submitInputButton';
+        }
+
+        if (empty($value)) {
+            $value = 'Submit';
+        }
+
+        return $this->inputButton('submit', $value, $name, $moreAttributes);
+    }
+
+    /**
+     * submit input <input type="reset">
+     */
+    public function reset($value = '', $name = '',  $moreAttributes = [])
+    {
+        // * unlike other functions, the $value parameter is after $name
+
+        // set default name, button input data is rarely processed, so
+        //      the name can often use the default value
+        if (empty($name)) {
+            $name = 'submitInputReset';
+        }
+
+        if (empty($value)) {
+            $value = 'Reset';
+        }
+
+        return $this->inputButton('reset', $value, $name, $moreAttributes);
+    }
+
 }
