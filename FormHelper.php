@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Class FormHelper - static class to display from elements in HTML
+ * Class FormDisplay - static class to display from elements in HTML
  */
 
-class FormDFormHelperisplay
+class FormDisplay
 {
     /**
      * automatically add an "id" attribute with the same value as "name"

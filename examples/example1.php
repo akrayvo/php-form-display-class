@@ -1,6 +1,6 @@
 <?php
 
-require_once('../FormDisplay.php');
+require_once('../FormHelper.php');
 $form = new FormDisplay();
 
 // get information passed from the form, values will be defaults in the
