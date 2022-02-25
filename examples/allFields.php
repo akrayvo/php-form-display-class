@@ -13,29 +13,26 @@ $form_rating = $form->getPassed('form_rating');
 $email_address = $form->getPassed('email_address');
 $phone_number = $form->getPassed('phone_number');
 $next_birthday = $form->getPassed('next_birthday');
-
 $hobby_movies = $form->getPassed('hobby_movies');
 $hobby_sports = $form->getPassed('hobby_sports');
 $hobby_books = $form->getPassed('hobby_books');
-
 $movie  = $form->getPassed('movie');
-
 $comments  = $form->getPassed('comments');
 $city  = $form->getPassed('city');
-
+$state  = $form->getPassed('state');
 $form_start_time = date('m/d/Y h:i:s A');
-
 $food = $form->getPassed('food');
-
 $form->setDoAddIdAttributeFromName(true);
 
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>PHP Form Display Class Example 1</title>
+	<title>Html Form Example - All Field Types</title>
 	<link rel="stylesheet" href="./style.css">
+
+	<!-- optional javacript -->
 	<script>
 		function updateFormRating() {
 			var form_rating = document.getElementById('form_rating').value;
@@ -49,10 +46,11 @@ $form->setDoAddIdAttributeFromName(true);
 			}
 		}
 	</script>
+
 </head>
 
 <body>
-	<h1>Html Form Example - Test Survey</h1>
+	<h1>Html Form Example - All Field Types</h1>
 	<?php
 	$text = 'Show / Hide Info';
 	$attributes = ['onclick' => 'toggleInfo()'];
@@ -71,7 +69,7 @@ $form->setDoAddIdAttributeFromName(true);
 	}
 
 	$doAddIdAttributeFromName
-	
+
 
 	?>
 	<?php $form->formStart(null, 'get', ['name' => 'myform']); ?>
@@ -194,14 +192,14 @@ $form->setDoAddIdAttributeFromName(true);
 				'taco' => 'Taco',
 			];
 			foreach ($foods as $key => $display) {
-				$id = 'food_'.$key;
+				$id = 'food_' . $key;
 				$isChecked = false;
 				if (!empty($food[$key])) {
 					$isChecked = true;
 				}
 				echo '<li>';
-					$form->checkbox('food['.$key.']', $isChecked, 1, ['id' => $id]);
-					echo '<label for="' . $id . '">' . $form->htmlEscape($display) .'</label>';
+				$form->checkbox('food[' . $key . ']', $isChecked, 1, ['id' => $id]);
+				echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
 				echo '</li>';
 			}
 			?>
@@ -245,6 +243,7 @@ $form->setDoAddIdAttributeFromName(true);
 		<label>Favorite City</label>
 		<?php
 		$cities = [
+			'' => '-- Select A City --',
 			'California' => [
 				'Los Angeles' => 'Los Angeles, CA',
 				'San Diego' => 'San Diego, CA',
@@ -262,6 +261,22 @@ $form->setDoAddIdAttributeFromName(true);
 		<ul class="formInfo">
 			<li>&lt;select&gt;&lt;option&gt;&lt;/option&gt;&lt;/select&gt;</li>
 			<li>&lt;select&gt;&lt;optgroup&gt;&lt;option&gt;&lt;/option&gt;&lt;/optgroup&gt;&lt;/select&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Favorite State</label>
+		<?php
+		$states = [
+			['id' => 34, 'abbreviation' => 'AZ', 'name' => 'Arizona', 'capital' => 'Phoenix'],
+			['id' => 38, 'abbreviation' => 'CA', 'name' => 'California', 'capital' => 'Sacramento'],
+			['id' => 49, 'abbreviation' => 'NY', 'name' => 'New York', 'capital' => 'Albany']
+		];
+		$form->selectByRecordSet('state', $states, 'id', 'name', '-- Select A City --', $state);
+		?>
+		<ul class="formInfo">
+			<li>&lt;select&gt;&lt;option&gt;&lt;/option&gt;&lt;/select&gt;</li>
+			<li>Set by database query results or a similar 2 dimensional array</li>
 		</ul>
 	</div>
 
