@@ -37,6 +37,50 @@ class FormDisplay
      */
     private $doPassedStringCleanup = true;
 
+    /**
+     * if this is set, selection option value and display text will both be set 
+     *      to the options array item value. so [2=>'a', => 3=>'b'] will output
+     *      <option value="a">a</option><option value="b">b</option>
+     * if not set, selection option value will be the array key and the display 
+     *      text will be the array value. so [2=>'a', => 3=>'b'] will output
+     *      <option value="2">a</option><option value="3">b</option>
+     */
+    private $doSelectOptionValueEqualsText = false;
+
+    /**
+     * converts passed value to boolean
+     */
+    private function returnBoolean($value) {
+        if ($value) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function setDoAddIdAttributeFromName($value) {
+        $this->doAddIdAttributeFromName = $this->returnBoolean($value);
+    }
+
+    public function setDoReturnHtml($value)
+    {
+        $this->doReturnHtml = $this->returnBoolean($value);
+    }
+
+    public function setIsXhtml($value)
+    {
+        $this->isXhtml = $this->returnBoolean($value);
+    }
+
+    public function setDoPassedStringCleanup($value)
+    {
+        $this->doPassedStringCleanup = $this->returnBoolean($value);
+    }
+
+    public function setdoSelectOptionValueEqualsText($value)
+    {
+        $this->doSelectOptionValueEqualsText = $this->returnBoolean($value);
+    }
 
     /**
      * output or return the html based on the doReturnHtml setting
@@ -51,27 +95,44 @@ class FormDisplay
         return '';
     }
 
+    /**
+     * escape string to display in HTML
+     */
     public function htmlEscape($string)
     {
         return htmlspecialchars($string);
     }
 
+    /**
+     * converts an array of tag attributes to a string
+     * numeric keys will be treated as boolen values, so attributes
+     *      such as "readonly" and "checked" can be added.
+     * ex: ['id'=>'name', 'placeholder'=>'Name', 'readonly'] will ouput
+     *      'id="name" placeholder="Name" readonly'
+     */
     private function attributeArrayToString($attributes)
     {
         if (empty($attributes) || !is_array($attributes)) {
             return '';
         }
 
+        $booleanAttributes = [];
+
         $attributeString = '';
         foreach ($attributes as $name => $value) {
             if (is_int($name)) {
-                $attributeString .= ' ' . $this->htmlEscape($value);
+                $booleanAttribute = $this->htmlEscape($value);
+                if (!in_array($booleanAttribute, $booleanAttributes)) {
+                    $attributeString .= ' ' . $booleanAttribute;
+                    $booleanAttributes[] = $booleanAttribute;
+                }
             } else {
                 $attributeString .= ' ' .
                     $this->htmlEscape($name) .
                     '="' . $this->htmlEscape($value) . '"';
             }
         }
+ 
         return $attributeString;
     }
 

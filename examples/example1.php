@@ -21,86 +21,21 @@ $hobby_books = $form->getPassed('hobby_books');
 $movie  = $form->getPassed('movie');
 
 $comments  = $form->getPassed('comments');
+$city  = $form->getPassed('city');
+
+$form_start_time = date('m/d/Y h:i:s A');
+
+$food = $form->getPassed('food');
+
+$form->setDoAddIdAttributeFromName(true);
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>PHP Form Display Class Example 1</title>
-	<style>
-		* {
-			box-sizing: border-box;
-			font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
-			font-size: 14px;
-		}
-
-		h1 {
-			font-size: 25px;
-		}
-
-		.inputContainer {
-			padding: 20px 5px;
-			/* border-bottom: 1px solid #EEE;*/
-		}
-
-
-
-		.inputContainer label {
-			display: block;
-			padding-bottom: 5px;
-		}
-
-		input,
-		button,
-		select,
-		textarea {
-			width: 100%;
-			padding: 3px;
-			font-size: 16px;
-			max-width: 400px;
-		}
-
-		.formInfo {
-			background-color: #e8e8e8;
-			padding: 4px 0;
-			color: #000;
-			margin: 7px 0 0 0;
-			border-left: 4px solid #080;
-			list-style: none;
-		}
-
-		.formInfo li {
-			padding: 4px 6px;
-		}
-
-		.isHidden {
-			display: none;
-		}
-
-		.inputList {
-			list-style: none;
-			padding: 0 10px;
-			margin: 0;
-		}
-
-		.inputList li {
-			padding: 6px 0;
-			margin: 0;
-		}
-
-		.inputList input {
-			width:auto;
-			/*padding: auto;
-			max-width: auto;*/
-		}
-
-		.inputContainer .inputList label {
-			display: inline;
-			padding:0;
-		}
-	</style>
+	<link rel="stylesheet" href="./style.css">
 	<script>
 		function updateFormRating() {
 			var form_rating = document.getElementById('form_rating').value;
@@ -114,7 +49,6 @@ $comments  = $form->getPassed('comments');
 			}
 		}
 	</script>
-
 </head>
 
 <body>
@@ -135,10 +69,9 @@ $comments  = $form->getPassed('comments');
 		var_dump($_GET);
 		echo '</pre>';
 	}
-	$form_start_time = $form->getPassed('form_start_time');
-	if (empty($form_start_time)) {
-		$form_start_time = date('m/d/Y h:i:s A');
-	}
+
+	$doAddIdAttributeFromName
+	
 
 	?>
 	<?php $form->formStart(null, 'get', ['name' => 'myform']); ?>
@@ -182,7 +115,7 @@ $comments  = $form->getPassed('comments');
 	<div class="inputContainer">
 		<label>Rate this survey on a scale from 1 to 10</label>
 		<div>Your Rating =
-			<b><span id="from_rating_display"><? echo $form_rating; ?></span></b>
+			<b><span id="from_rating_display"><?php echo $form_rating; ?></span></b>
 		</div>
 		<?php
 		$attributes = [
@@ -252,6 +185,34 @@ $comments  = $form->getPassed('comments');
 	</div>
 
 	<div class="inputContainer">
+		<label>Favorite Foods</label>
+		<ul class="inputList">
+			<?php
+			$foods = [
+				'hamburger' => 'Hamburger',
+				'pizza' => 'Pizza',
+				'taco' => 'Taco',
+			];
+			foreach ($foods as $key => $display) {
+				$id = 'food_'.$key;
+				$isChecked = false;
+				if (!empty($food[$key])) {
+					$isChecked = true;
+				}
+				echo '<li>';
+					$form->checkbox('food['.$key.']', $isChecked, 1, ['id' => $id]);
+					echo '<label for="' . $id . '">' . $form->htmlEscape($display) .'</label>';
+				echo '</li>';
+			}
+			?>
+		</ul>
+		<ul class="formInfo">
+			<li>&lt;input type="checkbox"&gt;</li>
+			<li>set by array</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
 		<label>Your Favorite Movie</label>
 		<ul class="inputList">
 			<li>
@@ -277,6 +238,30 @@ $comments  = $form->getPassed('comments');
 		<?php $form->textarea('comments', $comments, ['style' => 'height:80px;']); ?>
 		<ul class="formInfo">
 			<li>&lt;textarea&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Favorite City</label>
+		<?php
+		$cities = [
+			'California' => [
+				'Los Angeles' => 'Los Angeles, CA',
+				'San Diego' => 'San Diego, CA',
+				'San Francisco' => 'San Francisco, CA'
+			],
+			'Texas' => [
+				'Austin' => 'Austin, TX',
+				'Houston' => 'Houston, TX'
+			],
+			'Boston' => 'Boston, MA',
+			'New York' => 'New York, NY'
+		];
+		$form->select('city', $cities, $city);
+		?>
+		<ul class="formInfo">
+			<li>&lt;select&gt;&lt;option&gt;&lt;/option&gt;&lt;/select&gt;</li>
+			<li>&lt;select&gt;&lt;optgroup&gt;&lt;option&gt;&lt;/option&gt;&lt;/optgroup&gt;&lt;/select&gt;</li>
 		</ul>
 	</div>
 
