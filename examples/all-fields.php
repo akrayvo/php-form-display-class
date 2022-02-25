@@ -20,6 +20,7 @@ $movie  = $form->getPassed('movie');
 $comments  = $form->getPassed('comments');
 $city  = $form->getPassed('city');
 $state  = $form->getPassed('state');
+$show  = $form->getPassed('show');
 $form_start_time = date('m/d/Y h:i:s A');
 $food = $form->getPassed('food');
 $form->setDoAddIdAttributeFromName(true);
@@ -193,13 +194,10 @@ $form->setDoAddIdAttributeFromName(true);
 			];
 			foreach ($foods as $key => $display) {
 				$id = 'food_' . $key;
-				$isChecked = false;
-				if (!empty($food[$key])) {
-					$isChecked = true;
-				}
+				$isChecked = (!empty($food[$key]));
 				echo '<li>';
-				$form->checkbox('food[' . $key . ']', $isChecked, 1, ['id' => $id]);
-				echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
+					$form->checkbox('food[' . $key . ']', $isChecked, 1, ['id' => $id]);
+					echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
 				echo '</li>';
 			}
 			?>
@@ -228,6 +226,30 @@ $form->setDoAddIdAttributeFromName(true);
 		</ul>
 		<ul class="formInfo">
 			<li>&lt;input type="radio"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Favorite TV Show</label>
+		<ul class="inputList">
+			<?php
+			$shows = [
+				'cheers' => 'Cheers',
+				'seinfeld' => 'Seinfeld',
+				'friends' => 'friends',
+			];
+			foreach ($shows as $key => $display) {
+				$id = 'show_' . $key;
+				echo '<li>';
+					$form->radio('show', $key, $show, ['id' => $id]);
+					echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
+				echo '</li>';
+			}
+			?>
+		</ul>
+		<ul class="formInfo">
+			<li>&lt;input type="radio"&gt;</li>
+			<li>set by array</li>
 		</ul>
 	</div>
 
