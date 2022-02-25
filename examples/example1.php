@@ -1,71 +1,307 @@
 <?php
+
 require_once('../FormDisplay.php');
 $form = new FormDisplay();
-?><!DOCTYPE html>
+
+// get information passed from the form, values will be defaults in the
+// 		form when the page reloads
+$first_name = $form->getPassed('first_name');
+$favorite_color = $form->getPassed('favorite_color');
+$favorite_number = $form->getPassed('favorite_number');
+$secret_code = $form->getPassed('secret_code');
+$form_rating = $form->getPassed('form_rating');
+$email_address = $form->getPassed('email_address');
+$phone_number = $form->getPassed('phone_number');
+$next_birthday = $form->getPassed('next_birthday');
+
+$hobby_movies = $form->getPassed('hobby_movies');
+$hobby_sports = $form->getPassed('hobby_sports');
+$hobby_books = $form->getPassed('hobby_books');
+
+$movie  = $form->getPassed('movie');
+
+$comments  = $form->getPassed('comments');
+
+?>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>PHP Form Display Class Example 1</title>
-    </head>
-	<body>
-        <h1>Html Form Example 1</h1>
-		<?php
-		if (!empty($_POST)) {
-			echo '<pre>';
-			var_dump($POST);
-			echo '</pre>';
-		}
-		if (!empty($_GET)) {
-			echo '<pre>';
-			var_dump($_GET);
-			echo '</pre>';
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>PHP Form Display Class Example 1</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+			font-size: 14px;
 		}
 
-		$selectData = array(
-			''=>'-- Select Option --',
-			'movies'=>'Watching Movies',
-			'tv'=>'Watching Television Shows',
-			'music'=>'Listening To Music'
-		);
-		$checkboxData = array(
-			'movies'=>'Watching Movies',
-			'tv'=>'Watching Television Shows',
-			'music'=>'Listening To Music'
-		);
-		?>
-        <?php $form->formStart(null, 'get', ['name'=>'myform']); ?>
-		<?php $form->hidden('hiddenvar', 'hiddenval'); ?>
-		<?php $form->text('textvar', 'textval', ['readonly', 'style'=>'color:#080;']); ?><br /><br />
-		<?php $form->color('colorvar', '0FF'); ?><br /><br />
-		<?php $form->number('numbervar', '12.35bc'); ?><br /><br />
-		<?php $form->password('numbervar'); ?><br /><br />
-		<?php $form->date('datevar', 'jan 5, 2013'); ?><br /><br />
-		<?php $form->email('emailvar', 'test@test.com'); ?><br /><br />
-		<?php $form->tel('telvar', '123-456-7890'); ?><br /><br />
-		<?php $form->search('searchvar', 'searchval'); ?><br /><br />
-		<?php $form->textArea('tavar', 'taval'); ?><br /><br />
-		<?php $form->select('hobby', $selectData, 'tv'); ?><br /><br />
-		<?php 
-		foreach ($checkboxData as $value => $display) {
-			$isSelected = false;
-			if ($value == 'tv') {
-				$isSelected = true;
+		h1 {
+			font-size: 25px;
+		}
+
+		.inputContainer {
+			padding: 20px 5px;
+			/* border-bottom: 1px solid #EEE;*/
+		}
+
+
+
+		.inputContainer label {
+			display: block;
+			padding-bottom: 5px;
+		}
+
+		input,
+		button,
+		select,
+		textarea {
+			width: 100%;
+			padding: 3px;
+			font-size: 16px;
+			max-width: 400px;
+		}
+
+		.formInfo {
+			background-color: #e8e8e8;
+			padding: 4px 0;
+			color: #000;
+			margin: 7px 0 0 0;
+			border-left: 4px solid #080;
+			list-style: none;
+		}
+
+		.formInfo li {
+			padding: 4px 6px;
+		}
+
+		.isHidden {
+			display: none;
+		}
+
+		.inputList {
+			list-style: none;
+			padding: 0 10px;
+			margin: 0;
+		}
+
+		.inputList li {
+			padding: 6px 0;
+			margin: 0;
+		}
+
+		.inputList input {
+			width:auto;
+			/*padding: auto;
+			max-width: auto;*/
+		}
+
+		.inputContainer .inputList label {
+			display: inline;
+			padding:0;
+		}
+	</style>
+	<script>
+		function updateFormRating() {
+			var form_rating = document.getElementById('form_rating').value;
+			document.getElementById('from_rating_display').innerHTML = form_rating;
+		}
+
+		function toggleInfo() {
+			var elems = document.getElementsByClassName('formInfo');
+			for (var i = 0; i < elems.length; i++) {
+				elems[i].classList.toggle('isHidden');
 			}
-			$form->checkbox($value, $isSelected, 1, ['id' => $value]);
-			echo ' <label for="' . $value . '">' . $display . '</label><br />'; 
 		}
-		?><br /><br />
+	</script>
 
-		<?php 
-		foreach ($checkboxData as $value => $display) {
-			$form->radio('hobbies', $value, 'music', ['id' => $value.'b']);
-			echo ' <label for="' . $value . 'b">' . $display . '</label><br />'; 
-		}
-		?><br /><br />
-		
-		<?php $form->submit(); ?><br /><br />
-		<?php $form->button(); ?><br /><br />
-		<?php $form->reset(); ?><br /><br />
-        <?php $form->formEnd(); ?>
-	</body>
+</head>
+
+<body>
+	<h1>Html Form Example - Test Survey</h1>
+	<?php
+	$text = 'Show / Hide Info';
+	$attributes = ['onclick' => 'toggleInfo()'];
+	$form->button($text, $attributes);
+	?>
+	<?php
+	if (!empty($_POST)) {
+		echo '<br><br><br><div><b>Post Variables</b><pre>';
+		var_dump($POST);
+		echo '</pre>';
+	}
+	if (!empty($_GET)) {
+		echo '<br><br><br><div><b>Get Variables</b><pre>';
+		var_dump($_GET);
+		echo '</pre>';
+	}
+	$form_start_time = $form->getPassed('form_start_time');
+	if (empty($form_start_time)) {
+		$form_start_time = date('m/d/Y h:i:s A');
+	}
+
+	?>
+	<?php $form->formStart(null, 'get', ['name' => 'myform']); ?>
+
+
+	<div class="inputContainer">
+		<label>Form Start Time (hidden field)</label>
+		<?php $form->hidden('form_start_time', $form_start_time); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="hidden"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>First Name</label>
+		<?php $form->text('first_name', $first_name); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="text"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Favorite Color</label>
+		<?php $form->color('favorite_color', $favorite_color); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="color"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Favorite Number From 1 To 10</label>
+		<?php
+		$attributes = ['min' => 1, 'max' => 10];
+		$form->number('favorite_number', $favorite_number, $attributes);
+		?>
+		<ul class="formInfo">
+			<li>&lt;input type="number"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Rate this survey on a scale from 1 to 10</label>
+		<div>Your Rating =
+			<b><span id="from_rating_display"><? echo $form_rating; ?></span></b>
+		</div>
+		<?php
+		$attributes = [
+			'onchange' => 'updateFormRating()',
+			'id' => 'form_rating'
+		];
+		$form->range('form_rating', 1, 10, $form_rating, $attributes);
+		?>
+		<ul class="formInfo">
+			<li>&lt;input type="range"&gt;</li>
+			<li>"onclick" and "id" attributes were set to display the
+				value using javascript</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Email Address</label>
+		<?php $form->email('email_address', $email_address); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="email"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Phone Number</label>
+		<?php $form->tel('phone_number', $phone_number); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="tel"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Next Birthday Date</label>
+		<?php $form->date('next_birthday', $next_birthday); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="date"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Secret Code</label>
+		<?php $form->password('secret_code'); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="password"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Your Hobbies</label>
+		<ul class="inputList">
+			<li>
+				<?php $form->checkbox('hobby_movies', $hobby_movies, 1, ['id' => 'hobby_movies']); ?>
+				<label for="hobby_movies">Watching Movies</label>
+			</li>
+			<li>
+				<?php $form->checkbox('hobby_sports', $hobby_sports, 1, ['id' => 'hobby_sports']); ?>
+				<label for="hobby_sports">Playing Sports</label>
+			</li>
+			<li>
+				<?php $form->checkbox('hobby_books', $hobby_books, 1, ['id' => 'hobby_books']); ?>
+				<label for="hobby_books">Reading Books</label>
+			</li>
+		</ul>
+		<ul class="formInfo">
+			<li>&lt;input type="checkbox"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Your Favorite Movie</label>
+		<ul class="inputList">
+			<li>
+				<?php $form->radio('movie', 'star_wars', $movie, ['id' => 'star_wars']); ?>
+				<label for="star_wars">Star Wars</label>
+			</li>
+			<li>
+				<?php $form->radio('movie', 'sound_of_music', $movie, ['id' => 'sound_of_music']); ?>
+				<label for="sound_of_music">Sound Of Music</label>
+			</li>
+			<li>
+				<?php $form->radio('movie', $movie, 1, ['id' => 'avatar']); ?>
+				<label for="avatar">Avatar</label>
+			</li>
+		</ul>
+		<ul class="formInfo">
+			<li>&lt;input type="radio"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<label>Comments</label>
+		<?php $form->textarea('comments', $comments, ['style' => 'height:80px;']); ?>
+		<ul class="formInfo">
+			<li>&lt;textarea&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<?php $form->submit(); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="submit"&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<?php $form->button(); ?>
+		<ul class="formInfo">
+			<li>&lt;button&gt;</li>
+		</ul>
+	</div>
+
+	<div class="inputContainer">
+		<?php $form->reset(); ?>
+		<ul class="formInfo">
+			<li>&lt;input type="reset"&gt;</li>
+		</ul>
+	</div>
+
+	<?php $form->formEnd(); ?>
+</body>
+
 </html>

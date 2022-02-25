@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class FormDisplay - static class to display from elements in HTML
  */
@@ -28,14 +29,20 @@ class FormDisplay
      *      <option value="1" "selected">
      */
     private $isXhtml = false;
-    
 
     /**
-     * determine whether to output or return the html based on the
-     *      optional parameter and the default class value
+     * string cleanup of passed variables
+     * removes html tags
+     * used in getPost, getGet, and getPassed functions
+     */
+    private $doPassedStringCleanup = true;
+
+
+    /**
+     * output or return the html based on the doReturnHtml setting
      */
     private function htmlOutputOrReturn($html)
-    {       
+    {
         if ($this->doReturnHtml) {
             return $html;
         }
@@ -61,8 +68,8 @@ class FormDisplay
                 $attributeString .= ' ' . $this->htmlEscape($value);
             } else {
                 $attributeString .= ' ' .
-                    $this->htmlEscape($name) . 
-                    '="' .$this->htmlEscape($value) . '"';
+                    $this->htmlEscape($name) .
+                    '="' . $this->htmlEscape($value) . '"';
             }
         }
         return $attributeString;
@@ -95,6 +102,8 @@ class FormDisplay
         }
 
         if (!empty($attributes['type'])) {
+            // do NOT automatically add id's to radios based on
+            //      name. mulitple radios usually have the same name.
             if ($attributes['type'] === 'radio') {
                 return false;
             }
@@ -136,10 +145,69 @@ class FormDisplay
         }
 
         if ($this->checkAddIdAttributeFromName($attributes)) {
+            // add id attribute based on name
+            // ex: <input type="text" name="last_name" id="last_name">
             $attributes['id'] = $attributes['name'];
         }
 
         return $attributes;
+    }
+
+    /**
+     * remove html tags from string.
+     * more stringprocessing code can be added here later
+     */
+    public function stringCleanup($string)
+    {
+        if (!$this->doPassedStringCleanup || !is_string($string)) {
+            return $string;
+        }
+        $string = strip_tags($string);
+        return $string;
+    }
+
+    /**
+     * get variables passed by post or get (form or url) 
+     * checks that the variable exists, so it will not
+     *      produce a PHP warning
+     */
+    public function getPassed($var, $returnOnfail = '')
+    {
+        if (isset($_POST[$var])) {
+            return $this->getPost($var, $returnOnfail);
+        } elseif (isset($_GET[$var])) {
+            return $this->getGet($var, $returnOnfail);
+        }
+
+        return $returnOnfail;
+    }
+
+    /**
+     * get variables passed by post (form) 
+     * checks that the variable exists, so it will not
+     *      produce a PHP warning
+     */
+    public function getPost($var, $returnOnfail = '')
+    {
+        if (isset($_POST[$var])) {
+            return $this->stringCleanup($_POST[$var]);
+        }
+
+        return $returnOnfail;
+    }
+
+    /**
+     * get variables passed by get (url) 
+     * checks that the variable exists, so it will not
+     *      produce a PHP warning
+     */
+    public function getGet($var, $returnOnfail = '')
+    {
+        if (isset($_GET[$var])) {
+            return $this->stringCleanup($_GET[$var]);
+        }
+
+        return $returnOnfail;
     }
 
     /**
@@ -154,7 +222,7 @@ class FormDisplay
             $action = $_SERVER['SCRIPT_NAME'];
         }
         $attributes['action'] = $action;
-        
+
         // if the method is "get" or "g" then set the method to get. otherwise default to post.
         if (strtolower($method) === 'get') {
             $method = 'get';
@@ -184,12 +252,12 @@ class FormDisplay
      */
     private function input($type, $name, $value = '', $moreAttributes = [])
     {
-        $attributes = [ 
+        $attributes = [
             'type' => $type,
             'name' => $name,
             'value' => $value
         ];
-        
+
         $attributes = $this->combineAttributes($attributes, $moreAttributes);
 
         $closingSlash = '';
@@ -197,13 +265,13 @@ class FormDisplay
             $closingSlash = ' /';
         }
 
-        $html = '<input' . $this->attributeArrayToString($attributes) . $closingSlash. '>';
+        $html = '<input' . $this->attributeArrayToString($attributes) . $closingSlash . '>';
 
         return $this->htmlOutputOrReturn($html);
     }
 
     /**
-     * text input <input type="hidden">
+     * <input type="hidden">
      */
     public function hidden($name, $value = '', $moreAttributes = [])
     {
@@ -211,7 +279,7 @@ class FormDisplay
     }
 
     /**
-     * text input <input type="text">
+     * <input type="text">
      */
     public function text($name, $value = '', $moreAttributes = [])
     {
@@ -219,15 +287,8 @@ class FormDisplay
     }
 
     /**
-     * text input <input type="search">
-     */
-    public function search($name, $value = '', $moreAttributes = [])
-    {
-        return $this->input('search', $name, $value, $moreAttributes);
-    }
-
-    /**
      * validate hex, 3 or 6 digit, with or without #
+     * used in the "color" function
      */
     private function returnValidHex($hex)
     {
@@ -235,10 +296,10 @@ class FormDisplay
             return '';
         }
 
-        $hex = strtolower( trim($hex, '#') );
+        $hex = strtolower(trim($hex, '#'));
 
         $length = strlen($hex);
-        if ($length != 3 && $length != 6 ) {
+        if ($length != 3 && $length != 6) {
             return '';
         }
 
@@ -249,16 +310,16 @@ class FormDisplay
 
         if ($length == 3) {
             // 3 digit, repeat each. ex 48B becomes 4488BB
-            $hex = str_repeat( substr($hex, 0, 1), 2) .
-                str_repeat( substr($hex, 1, 1), 2) .
-                str_repeat( substr($hex, 2, 1), 2);
+            $hex = str_repeat(substr($hex, 0, 1), 2) .
+                str_repeat(substr($hex, 1, 1), 2) .
+                str_repeat(substr($hex, 2, 1), 2);
         }
 
         return '#' . $hex;
     }
 
     /**
-     * text input <input type="color">
+     * <input type="color">
      */
     public function color($name, $value = '', $moreAttributes = [])
     {
@@ -267,7 +328,7 @@ class FormDisplay
     }
 
     /**
-     * text input <input type="number">
+     * <input type="number">
      */
     public function number($name, $value = '', $moreAttributes = [])
     {
@@ -278,12 +339,12 @@ class FormDisplay
     }
 
     /**
-     * range input <input type="range">
+     * <input type="range">
      */
     public function range($name, $min, $max, $value = '', $moreAttributes = [])
     {
-        $min = intval($min);
-        $max = intval($max);
+        $moreAttributes['min'] = intval($min);
+        $moreAttributes['max'] = intval($max);
 
         if (is_string($value) && strlen($value) > 0) {
             $value = intval($value);
@@ -292,7 +353,7 @@ class FormDisplay
     }
 
     /**
-     * text input <input type="number">
+     * <input type="email">
      */
     public function email($name, $value = '', $moreAttributes = [])
     {
@@ -300,21 +361,26 @@ class FormDisplay
     }
 
     /**
-     * text input <input type="tel">
+     * <input type="tel">
      */
     public function tel($name, $value = '', $moreAttributes = [])
     {
         return $this->input('tel', $name, $value, $moreAttributes);
     }
-    
+
     /**
-     * date input <input type="date">
+     * <input type="date">
+     * $value can accept a date in any format that is accepted by PHP's 
+     *      strtotime() function. ex: "2020-01-15", "2020/01/15", 
+     *      "2020/01/15 12:30PM", "January 15, 2020", "now", "next Thursday", etc
      */
     public function date($name, $value = '', $moreAttributes = [])
     {
         if (empty($value)) {
             $value = '';
         } else {
+            // convert date to "Y-m-d" format
+            // 
             $unitTime = strtotime($value);
             if (empty($unitTime)) {
                 $value = '';
@@ -326,8 +392,8 @@ class FormDisplay
     }
 
     /**
-     * password input <input type="password">
-     * * unlike other functions, password has no $value
+     * <input type="password">
+     * unlike other functions, password has no $value
      */
     public function password($name, $moreAttributes = [])
     {
@@ -335,32 +401,32 @@ class FormDisplay
     }
 
     /**
-     * input checkbox <input type="checkbox">
+     * <input type="checkbox">
      * * unlike other functions, has $isChecked parameter before $value
      */
     public function checkbox($name, $isChecked = false, $value = 1, $moreAttributes = [])
-	{
+    {
         if (!empty($isChecked)) {
             if ($this->isXhtml) {
                 $moreAttributes['checked'] = 'checked';
             } else {
                 $moreAttributes[] = 'checked';
-            } 
+            }
         }
 
         $moreAttributes = $this->combineAttributes($moreAttributes);
 
         $this->input('checkbox', $name, $value, $moreAttributes);
-	}
+    }
 
     /**
-     * input radio <input type="radio">
+     * <input type="radio">
      * if $value is equal to $selectedValue, the radio button will be selected. this
      *      way, when radio buttons are added in a loop, this function takes care of
      *      the evalutions
      */
-    public function radio($name, $value = 1, $selectedValue = '', $moreAttributes = [])
-	{
+    public function radio($name, $value, $selectedValue = '', $moreAttributes = [])
+    {
         if (!empty($value) && !empty($selectedValue) && $value == $selectedValue) {
             if ($this->isXhtml) {
                 $moreAttributes['checked'] = 'checked';
@@ -371,11 +437,11 @@ class FormDisplay
 
         $moreAttributes = $this->combineAttributes($moreAttributes);
 
-        $this->input('radio', 'hobbies', $value, $moreAttributes);
-	}
+        $this->input('radio', $name, $value, $moreAttributes);
+    }
 
     /**
-     * submit input <input type="submit">
+     * <input type="submit">
      * * unlike other functions, the $value parameter is after $name
      */
     public function submit($value = '', $name = '',  $moreAttributes = [])
@@ -396,7 +462,7 @@ class FormDisplay
     }
 
     /**
-     * submit input <input type="reset">
+     * <input type="reset">
      * * unlike other functions, the $value parameter is after $name
      */
     public function reset($value = '', $name = '',  $moreAttributes = [])
@@ -416,37 +482,47 @@ class FormDisplay
         return $this->input('reset', $name, $value, $moreAttributes);
     }
 
-    public function textArea($name, $value='', $moreAttributes = [])
+    /**
+     * <textarea>
+     */
+    public function textArea($name, $value = '', $moreAttributes = [])
     {
-        $attributes = [ 
+        $attributes = [
             'name' => $name
         ];
 
         $attributes = $this->combineAttributes($attributes, $moreAttributes);
 
-        $html = '<textarea' . $this->attributeArrayToString($attributes) . '>' . 
-            $this->htmlEscape($value) . 
+        $html = '<textarea' . $this->attributeArrayToString($attributes) . '>' .
+            $this->htmlEscape($value) .
             '</textarea>';
-        
+
         return $this->htmlOutputOrReturn($html);
     }
 
+    /**
+     *<button>
+     */
     public function button($html = 'Submit', $moreAttributes = [])
     {
         // note that html is not escaped. this will allow images
-        $html = '<button' . $this->attributeArrayToString($moreAttributes) . '>' . 
-            $html . 
+        $html = '<button' . $this->attributeArrayToString($moreAttributes) . '>' .
+            $html .
             '</button>';
 
-        return $this->htmlOutputOrReturn($html);    
+        return $this->htmlOutputOrReturn($html);
     }
 
+    /**
+     * <option>
+     * called in the select() function
+     */
     private function selectOption($display, $value, $selectedValue)
-	{
-        $attributes = [ 
+    {
+        $attributes = [
             'value' => $value
         ];
-        
+
         if (!empty($value) && !empty($selectedValue) && $value == $selectedValue) {
             if ($this->isXhtml) {
                 $attributes['selected'] = 'selected';
@@ -455,43 +531,55 @@ class FormDisplay
             }
         }
 
-        $html = '<option' . 
-            $this->attributeArrayToString($attributes) . 
-            '>' . 
-            $this->htmlEscape($display) . 
+        $html = '<option' .
+            $this->attributeArrayToString($attributes) .
+            '>' .
+            $this->htmlEscape($display) .
             '</option>';
 
         return $html;
     }
 
+    /**
+     * <select>
+     * $options is an array of key/value pairs that will become the html options
+     * $options accepts 2 dimensional arrays. the key of the inner array will
+     *      be the label of an optgroup
+     * $options = ['austin'=>'Austin', 'dallas'=>'Dallas', 'seattle'=>'Seattle'];
+     * $options = [
+     *      'Texas'=>['austin'=>'Austin', 'dallas'=>'Dallas'],
+     *      'Washington'=>['seattle'=>'Seattle']];
+     */
     public function select($name, $options, $value = null, $moreAttributes = [])
-	{
-        $attributes = [ 
+    {
+        $attributes = [
             'name' => $name
         ];
 
         $html = '<select' . $this->attributeArrayToString($attributes) . '>';
 
-        foreach ($options as $optionValue => $display)
-		{
+        foreach ($options as $optionValue => $display) {
             if (is_array($display)) {
-                $html .= '<optgroup ' . 
-                    $this->attributeArrayToString(['label' => $optionValue]) . 
+                $html .= '<optgroup ' .
+                    $this->attributeArrayToString(['label' => $optionValue]) .
                     '>';
                 foreach ($display as $groupOptionValue => $groupOptionDisplay) {
                     $html .= $this->selectOption(
-                        $groupOptionDisplay, 
-                        $groupOptionValue, 
-                        $value);
+                        $groupOptionDisplay,
+                        $groupOptionValue,
+                        $value
+                    );
                 }
                 $html .= '</optgroup>';
             } else {
                 $html .= $this->selectOption($display, $optionValue, $value);
             }
-		}
+        }
 
         $html .= '</select>';
 
         return $this->htmlOutputOrReturn($html);
-	}
+    }
+
+    
 }
