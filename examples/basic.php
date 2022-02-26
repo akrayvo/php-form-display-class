@@ -22,24 +22,25 @@ $colors = [
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Html Form Example - All Field Types</title>
+    <title>HTML Form Example - Basic</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-
+    <h1>HTML Form Example - Basic</h1>
+    
     <?php $form->formStart(); ?>
 
-    <div>Name</div>
-    <?php $form->text('name', $name); ?><br><br>
+        <div>Name</div>
+        <?php $form->text('name', $name); ?><br><br>
 
-    <div>Favorite Color</div>
-    <?php $form->select('colors', $colors); ?><br><br>
+        <div>Favorite Color</div>
+        <?php $form->select('colors', $colors); ?><br><br>
 
-    <div>Comments</div>
-    <?php $form->textarea('comments'); ?><br><br>
+        <div>Comments</div>
+        <?php $form->textarea('comments'); ?><br><br>
 
-    <?php $form->submit('Save Info') ?>
+        <?php $form->submit('Save Info') ?>
 
     <?php $form->formEnd(); ?>
 

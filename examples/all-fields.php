@@ -33,7 +33,7 @@ $form->setDoAddIdAttributeFromName(true);
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Html Form Example - All Field Types</title>
+	<title>HTML Form Example - All Field Types</title>
 	<link rel="stylesheet" href="./style.css">
 
 	<!-- optional javacript -->
@@ -54,7 +54,7 @@ $form->setDoAddIdAttributeFromName(true);
 </head>
 
 <body>
-	<h1>Html Form Example - All Field Types</h1>
+	<h1>HTML Form Example - All Field Types</h1>
 	<?php
 	$text = 'Show / Hide Info';
 	$attributes = ['onclick' => 'toggleInfo()'];
