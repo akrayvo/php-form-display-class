@@ -3,6 +3,8 @@
 require_once('../FormHelper.php');
 $form = new FormDisplay();
 
+$form->setDoPassedStringCleanup(false);
+
 // get information passed from the form, values will be defaults in the
 // 		form when the page reloads
 $first_name = $form->getPassed('first_name');
@@ -25,7 +27,8 @@ $form_start_time = date('m/d/Y h:i:s A');
 $food = $form->getPassed('food');
 $form->setDoAddIdAttributeFromName(true);
 
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -68,9 +71,6 @@ $form->setDoAddIdAttributeFromName(true);
 		var_dump($_GET);
 		echo '</pre>';
 	}
-
-	$doAddIdAttributeFromName
-
 
 	?>
 	<?php $form->formStart(null, 'get', ['name' => 'myform']); ?>
@@ -196,8 +196,8 @@ $form->setDoAddIdAttributeFromName(true);
 				$id = 'food_' . $key;
 				$isChecked = (!empty($food[$key]));
 				echo '<li>';
-					$form->checkbox('food[' . $key . ']', $isChecked, 1, ['id' => $id]);
-					echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
+				$form->checkbox('food[' . $key . ']', $isChecked, 1, ['id' => $id]);
+				echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
 				echo '</li>';
 			}
 			?>
@@ -241,8 +241,8 @@ $form->setDoAddIdAttributeFromName(true);
 			foreach ($shows as $key => $display) {
 				$id = 'show_' . $key;
 				echo '<li>';
-					$form->radio('show', $key, $show, ['id' => $id]);
-					echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
+				$form->radio('show', $key, $show, ['id' => $id]);
+				echo '<label for="' . $id . '">' . $form->htmlEscape($display) . '</label>';
 				echo '</li>';
 			}
 			?>

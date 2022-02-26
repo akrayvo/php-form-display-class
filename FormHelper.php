@@ -10,8 +10,8 @@ class FormDisplay
      * automatically add an "id" attribute with the same value as "name"
      * does not affect radio inputs because they can have 
      *      multiple elements with the same name
-     * if set to false, id's can be by added with the $moreAttributeAr parameter
-     * if set to true, id's can be by overridden with the $moreAttributeAr parameter
+     * if set to false, id's can be by added with the $moreAttributes parameter
+     * if set to true, id's can be by overridden with the $moreAttributes parameter
      */
     private $doAddIdAttributeFromName = false;
 
@@ -22,26 +22,26 @@ class FormDisplay
     private $doReturnHtml = false;
 
     /**
-     * close tag elements, ex: <input type="input" name="name"  />
+     * close tag elements, ex: <input type="input" name="name" />
      *      vs <input type="input" name="name">
      * boolean attributes will have values, ex:
      *      <option value="1" selected="selected"> vs.
-     *      <option value="1" "selected">
+     *      <option value="1" selected>
      */
     private $isXhtml = false;
 
     /**
      * string cleanup of passed variables
      * removes html tags
-     * used in getPost, getGet, and getPassed functions
+     * used in getPost(), getGet(), and getPassed() functions
      */
     private $doPassedStringCleanup = true;
 
     /**
-     * if this is set, selection option value and display text will both be set 
+     * if this is set, select option value and display text will both be set 
      *      to the options array item value. so [2=>'a', => 3=>'b'] will output
      *      <option value="a">a</option><option value="b">b</option>
-     * if not set, selection option value will be the array key and the display 
+     * if not set, select option value will be the array key and the display 
      *      text will be the array value. so [2=>'a', => 3=>'b'] will output
      *      <option value="2">a</option><option value="3">b</option>
      */
@@ -50,7 +50,8 @@ class FormDisplay
     /**
      * converts passed value to boolean
      */
-    private function returnBoolean($value) {
+    private function returnBoolean($value)
+    {
         if ($value) {
             return true;
         } else {
@@ -58,7 +59,8 @@ class FormDisplay
         }
     }
 
-    public function setDoAddIdAttributeFromName($value) {
+    public function setDoAddIdAttributeFromName($value)
+    {
         $this->doAddIdAttributeFromName = $this->returnBoolean($value);
     }
 
@@ -74,10 +76,13 @@ class FormDisplay
 
     public function setDoPassedStringCleanup($value)
     {
+        echo 'setDoPassedStringCleanup=';
+        var_dump($value);
+        echo '<br><br>' . "\n\n";
         $this->doPassedStringCleanup = $this->returnBoolean($value);
     }
 
-    public function setdoSelectOptionValueEqualsText($value)
+    public function setDoSelectOptionValueEqualsText($value)
     {
         $this->doSelectOptionValueEqualsText = $this->returnBoolean($value);
     }
@@ -132,7 +137,7 @@ class FormDisplay
                     '="' . $this->htmlEscape($value) . '"';
             }
         }
- 
+
         return $attributeString;
     }
 
@@ -220,9 +225,15 @@ class FormDisplay
      */
     public function stringCleanup($string)
     {
+        echo '<hr>';
+        var_dump($string);
+        var_dump(!$this->doPassedStringCleanup);
+        var_dump(!is_string($string));
+        echo 'A<Br>';
         if (!$this->doPassedStringCleanup || !is_string($string)) {
             return $string;
         }
+        echo 'B<Br>' . "\n\n\n";
         $string = strip_tags($string);
         return $string;
     }
@@ -546,7 +557,7 @@ class FormDisplay
     /**
      * <textarea>
      */
-    public function textArea($name, $value = '', $moreAttributes = [])
+    public function textarea($name, $value = '', $moreAttributes = [])
     {
         $attributes = [
             'name' => $name
@@ -633,6 +644,9 @@ class FormDisplay
                 }
                 $html .= '</optgroup>';
             } else {
+                if ($this->doSelectOptionValueEqualsText) {
+                    $optionValue = $display;
+                }
                 $html .= $this->selectOption($display, $optionValue, $value);
             }
         }
@@ -658,9 +672,15 @@ class FormDisplay
      *      <option value="Select An Item"></option>
      * if $emptyText is empty, no additional option will be added
      */
-    public function selectByRecordSet($name, $records, $valueKey, $displayKey, 
-        $emptyText = '', $value = null, $moreAttributes = [])
-    {
+    public function selectByRecordSet(
+        $name,
+        $records,
+        $valueKey,
+        $displayKey,
+        $emptyText = '',
+        $value = null,
+        $moreAttributes = []
+    ) {
         $options = [];
 
         if (!empty($emptyText)) {
@@ -674,5 +694,5 @@ class FormDisplay
         }
 
         return $this->select($name, $options, $value, $moreAttributes);
-    }   
+    }
 }
