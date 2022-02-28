@@ -146,8 +146,8 @@ $form->text('first_name', $first_name);
 ```
 
 ### private $doSelectOptionValueEqualsText = false;
-* if this is set, `select` `option` `value` and display text will both be set to the options array item value, so `[2=>'a', => 3=>'b']` will output `<option value="a">a</option><option value="b">b</option>`
-* if not set, `select` `option` `value` will be the array key and the display text will be the array value, so `[2=>'a', => 3=>'b']` will output `<option value="2">a</option><option value="3">b</option>`
+* if set, `select` `option` `value` and display text will both be set to the options array item value, so `[2=>'a', => 3=>'b']` will output `<option value="a">a</option><option value="b">b</option>`
+* if NOT set, `select` `option` `value` will be the array key and the display text will be the array value, so `[2=>'a', => 3=>'b']` will output `<option value="2">a</option><option value="3">b</option>`
 ```
 $options = ['NY'=>'New York', 'OH'=>'Ohio'];
 
@@ -163,7 +163,7 @@ $form->select('state', $options);
 ## Using form tag attributes
 All form element functions include a `$moreAttributes` paramter. It takes an array of attributes with the $key as the attribute name and the value being the value.
 
-If the key is numeric, it will be handled as a boolean attribute attriutes. (with no value such as `readonly`, `disabled`, `checked`, etc.).
+If the key is numeric, it will be handled as a boolean attribute (with no value such as `readonly`, `disabled`, `checked`, etc.).
 
 Common attributes would include `id`, `class`, `style`, `placeholder`, etc.
 
@@ -186,7 +186,7 @@ HTML output
 * `setDoSelectOptionValueEqualsText($value)` - set $doSelectOptionValueEqualsText
 ### String Manipulation
 * `htmlEscape($string)` - escape a string to display in HTML
-* `stringCleanup($string)` - strips HTML tags from a sgtring
+* `stringCleanup($string)` - strips HTML tags from a string
 ### Get Passed Data
 * `getPassed($var, $returnOnfail = '')` - retrive a value from $_GET or $_POST
 * `getPost($var, $returnOnfail = '')` - retrive a value from $_POST
