@@ -114,7 +114,7 @@ echo $html;
 ```
      
 ### private $isXhtml = false;
-* close tag elements, ex: `<input type="input" name="name"> vs <input type="input" name="name">`
+* close tag elements, ex: `<input type="input" name="name"> vs <input type="input" name="name" />`
 * boolean attributes will have values, ex: `<option value="1" selected="selected">` vs. `<option value="1" selected>`
 ```
 $form->setIsXhtml(false);
@@ -138,7 +138,7 @@ $first_name = $form->getPassed('first_name');
 $form->text('first_name', $first_name);
 // <input type="text" name="first_name" value="Joe">
 
-$form->setDoPassedStringCleanup(true);
+$form->setDoPassedStringCleanup(false);
 $first_name = $form->getPassed('first_name');
 $form->text('first_name', $first_name);
 // (note that the value is HTML encoded)
@@ -146,8 +146,8 @@ $form->text('first_name', $first_name);
 ```
 
 ### private $doSelectOptionValueEqualsText = false;
-* if this is set, `select` `option` `value` and display text will both be set to the options array item value. so `[2=>'a', => 3=>'b']` will output `<option value="a">a</option><option value="b">b</option>`
-* if not set, `select` `option` `value` will be the array key and the display text will be the array value. so `[2=>'a', => 3=>'b']` will output `<option value="2">a</option><option value="3">b</option>`
+* if this is set, `select` `option` `value` and display text will both be set to the options array item value, so `[2=>'a', => 3=>'b']` will output `<option value="a">a</option><option value="b">b</option>`
+* if not set, `select` `option` `value` will be the array key and the display text will be the array value, so `[2=>'a', => 3=>'b']` will output `<option value="2">a</option><option value="3">b</option>`
 ```
 $options = ['NY'=>'New York', 'OH'=>'Ohio'];
 
