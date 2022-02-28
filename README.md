@@ -1,4 +1,4 @@
-# Php Form Helper Class
+# PHP Form Helper Class
 [View on Github »](https://github.com/akrayvo/php-form-helper-class)
 
 A simple class to display HTML form elements using PHP. 
@@ -86,8 +86,8 @@ Generated HTML
 ### private $doAddIdAttributeFromName = false;
 * automatically add an `id` attribute with the same value as `name`
 * does not affect radio inputs because they can have multiple elements with the same `name`
-* if set to false, `id's` can be by added with the `$moreAttributes` parameter
-* if set to true, `id's` can be by overridden with the `$moreAttributes` parameter 
+* if set to false, `id` can be by added with the `$moreAttributes` parameter
+* if set to true, `id` can be by overridden with the `$moreAttributes` parameter 
 ```
 $form->setDoAddIdAttributeFromName(false);
 $form->text('first_name');
@@ -99,7 +99,7 @@ $form->text('first_name');
 ```
 
 ### private $doReturnHtml = false;
-* return the html elements as a string
+* return the HTML elements as a string
 * if not set, output is written to the screen
 ```
 $form->setDoReturnHtml(false);
@@ -128,7 +128,7 @@ $form->text('first_name', '', '[readonly]');
 
 ### private $doPassedStringCleanup = true;
 * string cleanup of passed variables
-* removes html tags
+* removes HTML tags
 * used in `getPost()`, `getGet()`, and `getPassed()` functions
 ```
 // passed from form: $first_name = "<b>Joe</b>"
@@ -141,7 +141,7 @@ $form->text('first_name', $first_name);
 $form->setDoPassedStringCleanup(true);
 $first_name = $form->getPassed('first_name');
 $form->text('first_name', $first_name);
-// (note that the value is html encoded)
+// (note that the value is HTML encoded)
 // <input type="text" name="first_name" value="&lt;b&gt;Joe&lt;/b&gt;">
 ```
 
@@ -186,7 +186,7 @@ HTML output
 * `setDoSelectOptionValueEqualsText($value)` - set $doSelectOptionValueEqualsText
 ### String Manipulation
 * `htmlEscape($string)` - escape a string to display in HTML
-* `stringCleanup($string)` - strips html tags from a sgtring
+* `stringCleanup($string)` - strips HTML tags from a sgtring
 ### Get Passed Data
 * `getPassed($var, $returnOnfail = '')` - retrive a value from $_GET or $_POST
 * `getPost($var, $returnOnfail = '')` - retrive a value from $_POST
