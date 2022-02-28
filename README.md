@@ -3,13 +3,13 @@
 
 A simple class to display HTML form elements using PHP. 
 
-The goal of this class is to make displaying forms simple. It takes care of the syntax and encoding when adding HTML form input elements. It does NOT handle all from display (containers, labels, etc) or validation.
+The goal of this class is to make displaying forms simple. It takes care of the syntax and encoding when adding HTML form input elements. It does NOT handle all HTML (containers, labels, etc.) or validation.
 
 ## Requirements
-* PHP >=5.1
+* PHP >= 5.1
 
 ## Installation
-Add the **FormHelper.php** class file to your project.
+Add the **FormHelper.php** file to your project.
 
 ## Basic Example
 HTML / PHP code
@@ -33,20 +33,37 @@ $colors = [
 
 ?>
 
-<?php $form->formStart(); ?>
+<?php 
+// start the form <form>
+$form->formStart(); 
+?>
 
     <div>Name</div>    
-    <?php $form->text('name', $name); ?><br><br>
+    <?php
+    // text input <input type="text">
+    $form->text('name', $name);
+    ?><br><br>
     
     <div>Favorite Color</div>
-    <?php $form->select('colors', $colors); ?><br><br>
+    <?php 
+    // select (dropdown) with options <select><option>
+    $form->select('colors', $colors);
+    ?><br><br>
     
     <div>Comments</div>
-    <?php $form->textarea('comments'); ?><br><br>
+    <?php 
+    // textarea (large text input) <textarea>
+    $form->textarea('comments');
+    ?><br><br>
     
-    <?php $form->submit('Save Info') ?>
+    <?php 
+    // submit button <input type="submit">
+    $form->submit('Save Info')
+    ?>
 
-<?php $form->formEnd(); ?>
+<?php 
+// end the form </form>
+$form->formEnd(); ?>
 ```
 Generated HTML
 ```
@@ -60,7 +77,7 @@ Generated HTML
     <div>Comments</div>
     <textarea name="comments"></textarea><br><br>
 
-    <input type="submit" name="submitInputButton" value="Save Info">
+    <input type="submit" name="submit" value="Save Info">
 </form>
 ```
 
@@ -146,7 +163,7 @@ $form->select('state', $options);
 ## Using form tag attributes
 All form element functions include a `$moreAttributes` paramter. It takes an array of attributes with the $key as the attribute name and the value being the value.
 
-If the key is numeric, it will be handled as a boolean attribute attriutes. (with no value such as `readonly`, `disabled`, `checked`, etc).
+If the key is numeric, it will be handled as a boolean attribute attriutes. (with no value such as `readonly`, `disabled`, `checked`, etc.).
 
 Common attributes would include `id`, `class`, `style`, `placeholder`, etc.
 
