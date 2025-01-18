@@ -114,7 +114,7 @@ echo $html;
 ```
      
 ### private $isXhtml = false;
-* close tag elements, ex: `<input type="input" name="name"> vs <input type="input" name="name" />`
+* close tag elements, ex: `<input type="input" name="name" /> vs <input type="input" name="name">`
 * boolean attributes will have values, ex: `<option value="1" selected="selected">` vs. `<option value="1" selected>`
 ```
 $form->setIsXhtml(false);
