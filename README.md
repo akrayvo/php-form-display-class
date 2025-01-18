@@ -118,11 +118,11 @@ echo $html;
 * boolean attributes will have values, ex: `<option value="1" selected="selected">` vs. `<option value="1" selected>`
 ```
 $form->setIsXhtml(false);
-$form->text('first_name', '', '[readonly]');
+$form->text('first_name', '', ['readonly']);
 // <input type="text" name="first_name" value="" readonly>
 
 $form->setIsXhtml(true);
-$form->text('first_name', '', '[readonly]');
+$form->text('first_name', '', ['readonly']);
 // <input type="text" name="first_name" value="" readonly="readonly" />
 ```
 
