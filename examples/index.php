@@ -35,6 +35,7 @@
                 and reset (reset button)
             </td>
         </tr>
+	</table>
 </body>
 
 </html>

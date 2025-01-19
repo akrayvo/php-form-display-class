@@ -12,7 +12,7 @@ $form = new FormDisplay();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Form Example - Settings</title>
-    <link rel="stylesheet" href="./style.css?x=2">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -23,9 +23,11 @@ $form = new FormDisplay();
     $form->formStart();
     ?>
 
-    <!----------------------------------------------------
+
+
+    <!--
     setDoAddIdAttributeFromName()
-    ----------------------------------------------------->
+    -->
 
     <h2>setDoAddIdAttributeFromName()</h2>
     <ul>
@@ -61,9 +63,9 @@ $form = new FormDisplay();
     <br><br><br>
 
 
-    <!----------------------------------------------------
+    <!--
     setDoReturnHtml()
-    ----------------------------------------------------->
+    -->
 
     <h2>setDoReturnHtml()</h2>
     <ul>
@@ -92,9 +94,9 @@ $form = new FormDisplay();
     <br><br><br>
 
 
-    <!----------------------------------------------------
+    <!--
     setIsXhtml()
-    ----------------------------------------------------->
+    -->
 
     <h2>setIsXhtml()</h2>
     <ul>
@@ -124,9 +126,9 @@ $form = new FormDisplay();
     <br><br><br>
 
 
-    <!----------------------------------------------------
+    <!--
     setDoPassedStringCleanup()
-    ----------------------------------------------------->
+    -->
 
     <h2>setDoPassedStringCleanup()</h2>
     <ul>
@@ -167,7 +169,9 @@ $form = new FormDisplay();
     <br><br><br>
 
 
-
+    <!--
+    setDoSelectOptionValueEqualsText()
+    -->
     <h2>setDoSelectOptionValueEqualsText()</h2>
     <ul>
         <li>when an array of data is passed for the options of a dropdown menu (select),
@@ -194,12 +198,6 @@ $form = new FormDisplay();
         $form->select("time_of_day", $selectOptions, "");
         // output: <select name="time_of_day"><option value="">-no answer-</option><option value="day">Daytime</option><option value="night">Nighttime</option></select>
     ?></div>
-
-
-
-
-
-
 
 
 

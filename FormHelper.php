@@ -126,24 +126,33 @@ class FormDisplay
 
         $attributeString = '';
         foreach ($attributes as $name => $value) {
-            if (is_int($name)) {
-                $booleanAttribute = $this->htmlEscape($value);
-                if (!in_array($booleanAttribute, $booleanAttributes)) {
-                    if ($this->isXhtml) {
-                        $attributeString .= ' ' . $booleanAttribute. '="'.$booleanAttribute.'"';
-                    } else {
-                        $attributeString .= ' ' . $booleanAttribute;
-                    }
-                    $booleanAttributes[] = $booleanAttribute;
-                }
-            } else {
-                $attributeString .= ' ' .
-                    $this->htmlEscape($name) .
-                    '="' . $this->htmlEscape($value) . '"';
-            }
+            $attributeString .= $this->attributeToString($name, $value);
         }
 
         return $attributeString;
+    }
+
+    private function attributeToString($name, $value)
+    {
+        if (is_null($value)) {
+            return '';
+        }
+
+        if (is_int($name)) {
+            // numeric keys are treated as non associatve array.
+            // so attriubes with no value, will be set this way (readonly, disabled) 
+            $booleanAttribute = $this->htmlEscape($value);
+            if (!in_array($booleanAttribute, $booleanAttributes)) {
+                $booleanAttributes[] = $booleanAttribute;
+                if ($this->isXhtml) {
+                    return ' ' . $booleanAttribute. '="'.$booleanAttribute.'"';
+                }
+                
+                return ' ' . $booleanAttribute;
+            }
+        }
+        return ' ' . $this->htmlEscape($name) . '="' . $this->htmlEscape($value) . '"';
+
     }
 
     /**
@@ -403,9 +412,17 @@ class FormDisplay
      */
     public function number($name, $value = '', $moreAttributes = [])
     {
-        if (is_string($value) && strlen($value) > 0) {
-            $value = floatval($value);
+        if (is_string($value) {
+            if (strlen($value) > 0 && is_numeric($value)) {
+                // convert valid number string to float
+                $value = floatval($value);
+            } else {
+                // the string is empty or is not a number. set null
+                $value = null;                   
+            }
         }
+
+
         return $this->input('number', $name, $value, $moreAttributes);
     }
 
