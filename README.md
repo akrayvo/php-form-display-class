@@ -147,6 +147,7 @@ $form->text('first_name', $first_name);
 ```
 
 ### private $doSelectOptionValueEqualsText = false;
+* when an array of data is passed for the options of a dropdown menu (select), this determines if the value for each option is the array item key or the array item value (same as the display)
 * if set, `select` `option` `value` and display text will both be set to the options array item value, so `[2=>'a', => 3=>'b']` will output `<option value="a">a</option><option value="b">b</option>`
 * if NOT set, `select` `option` `value` will be the array key and the display text will be the array value, so `[2=>'a', => 3=>'b']` will output `<option value="2">a</option><option value="3">b</option>`
 ```
