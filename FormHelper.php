@@ -412,7 +412,7 @@ class FormDisplay
      */
     public function number($name, $value = '', $moreAttributes = [])
     {
-        if (is_string($value) {
+        if (is_string($value)) {
             if (strlen($value) > 0 && is_numeric($value)) {
                 // convert valid number string to float
                 $value = floatval($value);
@@ -434,9 +434,16 @@ class FormDisplay
         $moreAttributes['min'] = intval($min);
         $moreAttributes['max'] = intval($max);
 
-        if (is_string($value) && strlen($value) > 0) {
-            $value = intval($value);
+        if (is_string($value)) {
+            if (strlen($value) > 0 && is_numeric($value)) {
+                // convert valid number string to float
+                $value = floatval($value);
+            } else {
+                // the string is empty or is not a number. set null
+                $value = null;                   
+            }
         }
+
         return $this->input('range', $name, $value, $moreAttributes);
     }
 
