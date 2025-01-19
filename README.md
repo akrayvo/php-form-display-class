@@ -128,8 +128,8 @@ $form->text('first_name', '', ['readonly']);
 
 ### private $doPassedStringCleanup = true;
 * string cleanup of passed variables
-* removes HTML tags
-* trims input
+* removes HTML tags (strip_tags)
+* strips whitespace from the beginning and end of a string (trim)
 * used in `getPost()`, `getGet()`, and `getPassed()` functions
 ```
 // passed from form: $first_name = "<b>Joe</b>"
