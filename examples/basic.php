@@ -6,6 +6,8 @@ $form = new FormDisplay();
 
 // get the value passed to the page. check both $_POST and $_GET
 $name = $form->getPassed('name');
+$color = $form->getPassed('color');
+$comments = $form->getPassed('comments');
 
 // options for select (dropdown menu)
 $colors = [
@@ -28,6 +30,7 @@ $colors = [
 
 <body>
     <h1>HTML Form Example - Basic</h1>
+    <div><a href="./">&laquo; back to All Examples</a></div><br><br>
     
     <?php $form->formStart(); ?>
 
@@ -35,10 +38,10 @@ $colors = [
         <?php $form->text('name', $name); ?><br><br>
 
         <div>Favorite Color</div>
-        <?php $form->select('colors', $colors); ?><br><br>
+        <?php $form->select('color', $colors, $color); ?><br><br>
 
         <div>Comments</div>
-        <?php $form->textarea('comments'); ?><br><br>
+        <?php $form->textarea('comments', $comments); ?><br><br>
 
         <?php $form->submit('Save Info') ?>
 

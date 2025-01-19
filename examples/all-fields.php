@@ -49,29 +49,29 @@ $form->setDoAddIdAttributeFromName(true);
 				elems[i].classList.toggle('isHidden');
 			}
 		}
+
+		window.onload = function() {
+			toggleInfo();
+		};
 	</script>
 
 </head>
 
 <body>
 	<h1>HTML Form Example - All Field Types</h1>
+	<div><a href="./">&laquo; back to All Examples</a></div><br><br>
 	<?php
-	$text = 'Show / Hide Info';
-	$attributes = ['onclick' => 'toggleInfo()'];
-	$form->button($text, $attributes);
-	?>
-	<?php
-	if (!empty($_POST)) {
-		echo '<br><br><br><div><b>Post Variables</b><pre>';
-		var_dump($POST);
-		echo '</pre>';
-	}
-	if (!empty($_GET)) {
+
+	// uncomment to view variables passed through the form
+	/*if (!empty($_GET)) {
 		echo '<br><br><br><div><b>Get Variables</b><pre>';
 		var_dump($_GET);
 		echo '</pre>';
-	}
+	}*/
 
+	$text = 'Show / Hide Info';
+	$attributes = ['onclick' => 'toggleInfo()'];
+	$form->button($text, $attributes);
 	?>
 	<?php $form->formStart(null, 'get', ['name' => 'myform']); ?>
 
@@ -236,7 +236,7 @@ $form->setDoAddIdAttributeFromName(true);
 			$shows = [
 				'cheers' => 'Cheers',
 				'seinfeld' => 'Seinfeld',
-				'friends' => 'friends',
+				'simpsons' => 'The Simpsons',
 			];
 			foreach ($shows as $key => $display) {
 				$id = 'show_' . $key;

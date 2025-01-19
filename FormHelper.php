@@ -32,12 +32,16 @@ class FormDisplay
 
     /**
      * string cleanup of passed variables
-     * removes html tags
+     * removes HTML tags (strip_tags)
+     * strips whitespace from the beginning and end of a string (trim)
      * used in getPost(), getGet(), and getPassed() functions
      */
     private $doPassedStringCleanup = true;
 
     /**
+     * when an array of data is passed for the options of a dropdown menu (select),
+     *      this determines if the value for each option is the array item key or 
+     *      the array item value (same as the display)
      * if this is set, select option value and display text will both be set 
      *      to the options array item value. so [2=>'a', => 3=>'b'] will output
      *      <option value="a">a</option><option value="b">b</option>
@@ -76,9 +80,6 @@ class FormDisplay
 
     public function setDoPassedStringCleanup($value)
     {
-        echo 'setDoPassedStringCleanup=';
-        var_dump($value);
-        echo '<br><br>' . "\n\n";
         $this->doPassedStringCleanup = $this->returnBoolean($value);
     }
 
@@ -128,7 +129,11 @@ class FormDisplay
             if (is_int($name)) {
                 $booleanAttribute = $this->htmlEscape($value);
                 if (!in_array($booleanAttribute, $booleanAttributes)) {
-                    $attributeString .= ' ' . $booleanAttribute;
+                    if ($this->isXhtml) {
+                        $attributeString .= ' ' . $booleanAttribute. '="'.$booleanAttribute.'"';
+                    } else {
+                        $attributeString .= ' ' . $booleanAttribute;
+                    }
                     $booleanAttributes[] = $booleanAttribute;
                 }
             } else {
@@ -220,21 +225,15 @@ class FormDisplay
     }
 
     /**
-     * remove html tags from string.
-     * more stringprocessing code can be added here later
+     * remove html tags from string. "<b>hello</b>" becomes "hello"
+     * trim string ex: " hello " becomes "hello"
      */
     public function stringCleanup($string)
     {
-        echo '<hr>';
-        var_dump($string);
-        var_dump(!$this->doPassedStringCleanup);
-        var_dump(!is_string($string));
-        echo 'A<Br>';
         if (!$this->doPassedStringCleanup || !is_string($string)) {
             return $string;
         }
-        echo 'B<Br>' . "\n\n\n";
-        $string = strip_tags($string);
+        $string = trim(strip_tags($string));
         return $string;
     }
 
@@ -488,7 +487,8 @@ class FormDisplay
 
         $moreAttributes = $this->combineAttributes($moreAttributes);
 
-        $this->input('checkbox', $name, $value, $moreAttributes);
+        $html = $this->input('checkbox', $name, $value, $moreAttributes);
+        return $this->htmlOutputOrReturn($html);
     }
 
     /**
@@ -509,7 +509,8 @@ class FormDisplay
 
         $moreAttributes = $this->combineAttributes($moreAttributes);
 
-        $this->input('radio', $name, $value, $moreAttributes);
+        $html = $this->input('radio', $name, $value, $moreAttributes);
+        return $this->htmlOutputOrReturn($html);
     }
 
     /**
