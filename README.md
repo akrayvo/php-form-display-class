@@ -3,7 +3,7 @@
 
 A simple class to display HTML form elements using PHP. 
 
-The goal of this class is to make displaying forms simple. It takes care of the syntax and encoding when adding HTML form input elements. It does NOT handle all HTML (containers, labels, etc.) or validation.
+The goal of this class is to make displaying forms simple. It takes care of the syntax and encoding when adding HTML form input elements. It does NOT handle all HTML (containers, labels, etc.), validation data, or process data.
 
 ## Requirements
 * PHP >= 5.1
@@ -79,6 +79,89 @@ Generated HTML
 
     <input type="submit" name="submit" value="Save Info">
 </form>
+```
+
+## Comparison of a setting up a form with and without using this class
+
+### Getting values from the form and cleanup (trimming and removing html tags)
+
+without class
+```
+<?php
+$full_name = "";
+if (isset($_POST['full_name'])) {
+    $full_name = $_POST['full_name'];
+    $full_name = strip_tags($full_name);
+    $full_name = trim($full_name);
+}
+?>
+```
+with class
+```
+<?php
+$full_name = $form->getPassed('full_name');
+?>
+```
+
+### Form start and end
+
+without class
+```
+<form action="<?php echo $_SERVER['SCRIPT_NAME']; ?>" method="post">
+</form>
+```
+
+with class
+```
+<?php
+$form->formStart();
+$form->formEnd();
+?>
+```
+
+### Text input
+
+without class
+```
+<input type="text" name="full_name" id="full_name" value="<?php echo htmlentities($full_name); ?>" placeholder="Full Name">
+```
+
+with class - if doAddIdAttributeFromName is set to true - $form->setDoAddIdAttributeFromName(true);
+```
+<?php $form->text('full_name', $full_name, ["placeholder"=>"Full Name"]); ?>
+```
+
+### Dropdown menu (select)
+
+without class
+```
+<select name="color">
+    <option value="" <?php if ($color == "") { echo "selected"; } ?>></option>
+    <option value="red" <?php if ($color == "red") { echo "selected"; } ?>>red</option>
+    <option value="green" <?php if ($color == "green") { echo "selected"; } ?>>blue</option>
+    <option value="red &amp; blue" <?php if ($color == "red & blue") { echo "selected"; } ?>>red &amp; blue</option>
+</select>
+```
+
+with class
+```
+<?php
+$colors = array('', 'red', 'blue', 'red & blue');
+$form->select('color', $colors, $color);
+?>
+```
+### Checkbox
+
+without class
+```
+<input type="checkbox" name="is_checked" value="1" <?php if ($is_checked) { echo "checked"; } ?>>
+```
+
+with class
+```
+<?php
+$form->checkbox('is_checked', $is_checked);
+?>
 ```
 
 ## Settings
