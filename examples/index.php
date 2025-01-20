@@ -13,9 +13,14 @@
     <h1>Examples</h1>
 
     <table>
+		<tr>
+            <td style="white-space:nowrap;"><a href="./compare.php">compare.php</a></td>
+            <td>A comparison of displaying a for with and without this class.</td>
+        </tr>
+        <tr>
         <tr>
             <td style="white-space:nowrap;"><a href="./basic.php">basic.php</a></td>
-            <td>A simple of example of how to add form fields to a PHP form.</td>
+            <td>A simple example of how to add form fields to a PHP form.</td>
         </tr>
         <tr>
             <td style="white-space:nowrap;"><a href="./all-fields.php">all-fields.php</a></td>

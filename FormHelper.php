@@ -142,6 +142,7 @@ class FormDisplay
             // numeric keys are treated as non associatve array.
             // so attriubes with no value, will be set this way (readonly, disabled) 
             $booleanAttribute = $this->htmlEscape($value);
+            $booleanAttributes = [];
             if (!in_array($booleanAttribute, $booleanAttributes)) {
                 $booleanAttributes[] = $booleanAttribute;
                 if ($this->isXhtml) {
