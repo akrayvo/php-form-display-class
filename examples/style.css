@@ -4,9 +4,33 @@
   font-size: 14px;
 }
 
-h1 {
-  font-size: 25px;
+html {
+  margin:0;
+  padding:20px;
 }
+
+h1 {
+  font-size: 24px;
+  margin:0;
+  padding: 0 0 4px 0;
+  font-weight:bold;
+}
+
+h2 {
+  font-size: 20px;
+  margin:0;
+  padding: 0 0 4px 0;
+  font-weight:bold;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight:bold;
+  margin:0;
+  padding: 0 0 2px 0;
+}
+
+
 
 .inputContainer {
   padding: 20px 5px;
@@ -24,8 +48,10 @@ textarea {
   width: 100%;
   padding: 3px;
   font-size: 16px;
-  max-width: 400px;
+  max-width: 260px;
 }
+
+
 
 .formInfo {
   background-color: #e8e8e8;
@@ -64,4 +90,32 @@ textarea {
 .inputContainer .inputList label {
   display: inline;
   padding: 0;
+}
+
+a, a:link, a:visited  {
+  color: #00C;
+  text-decoration: underline; 
+}
+
+a:active, a:hover {
+  color: #55F;
+  text-decoration: underline; 
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table td {
+  padding: 10px;
+}
+
+ul {
+  list-style-position: inside;
+  margin: 0 0 8px 0;
+  padding: 0;
+}
+
+.section-label {
+  padding: 10px 0 2px 0;
 }
